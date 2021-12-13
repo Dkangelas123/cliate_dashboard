@@ -1,20 +1,29 @@
 var todayDate = new Date().toISOString().slice(0, 10);
 console.log(todayDate);
 
-function getInfo(){
-  
-    var newSearch = document.getElementById("searchCity");
-    var newCity = document.getElementById("Name-city");
-newCity.innerHTML =newSearch.value +" ("+ todayDate+ ")";
-console.log(newCity);
-}
-
-
-
-fetch('https://api.openweathermap.org/data/2.5/forecast?q='+newSearch.value+'&appid=d31115b3271c8a36e1e9b1181053867c')
+var weatherTime = {
+"apikey":"d31115b3271c8a36e1e9b1181053867c",
+fetchweatherTime: function(city){
+fetch("https://api.openweathermap.org/data/2.5/forecast?q="+ city +"&appid=" + this.apikey + "&units=metric")
 .then(Response => Response.json())
-.then(data =>{
-    for(i=0;i<5;i++){
-        document.getElementById("day" + (i+1) + "daytemp").innerHTML = "temp:" + Number(data.list[i].main.temp - 284.23).toFixed(1)+"°";
-    }
-})
+.then(data => this.displaycityname(data));
+
+},
+displaycityname: function(data){
+    var {name} = data.city;
+    var {coord} = data.city;
+    var {temp} = data.list[0].main;
+    var {speed} = data.list[0].wind;
+    var {humidity} = data.list[0].main;
+    var {icon} = data.list[0].weather[0];
+
+   console.log(name, temp, coord, speed, humidity, icon)
+   document.querySelector("#Name-city").innerHTML = name + " (" + todayDate + ")"; 
+   document.querySelector("#daytemp").innerHTML ="Temp: " +  temp +"°" ; 
+   document.querySelector("#daywind").innerHTML = "Wind: " +speed  ; 
+   document.querySelector("#dayhumidity").innerHTML ="Humidity: " + humidity; 
+   document.querySelector("#UVindex").innerHTML ="UVindex: " ; 
+   document.querySelector("#imageicon").src = "http://openweathermap.org/img/wn/"+ icon +"@2x.png"
+
+}
+}
