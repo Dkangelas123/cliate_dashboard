@@ -1,1 +1,1 @@
-# cliate_dashboard
+# climate_dashboard
